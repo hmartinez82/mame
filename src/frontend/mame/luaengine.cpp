@@ -2068,16 +2068,13 @@ void lua_engine::initialize()
 			return filename ? sm.start_recording(filename) : sm.start_recording();
 		};
 	sound_type["stop_recording"] = &sound_manager::stop_recording;
-	sound_type["get_samples"] =
-		[] (sound_manager &sm, sol::this_state s)
-		{
-			luaL_Buffer buff;
-			s32 const count = sm.sample_count() * 2 * 2; // 2 channels, 2 bytes per sample
-			s16 *const ptr = (s16 *)luaL_buffinitsize(s, &buff, count);
-			sm.samples(ptr);
-			luaL_pushresultsize(&buff, count);
-			return sol::make_reference(s, sol::stack_reference(s, -1));
-		};
+	//	sound_type["get_samples"] =
+	//		[] (sound_manager &sm, sol::this_state s)
+	//		{
+	//			std::vector<s16> samples = sm.samples();
+	//			lua_pushlstring(s, (const char *)samples.data(), samples.size()*2);
+	//			return sol::make_reference(s, sol::stack_reference(s, -1));
+	//		};
 	sound_type["muted"] = sol::property(&sound_manager::muted);
 	sound_type["ui_mute"] = sol::property(
 			static_cast<bool (sound_manager::*)() const>(&sound_manager::ui_mute),
@@ -2088,9 +2085,6 @@ void lua_engine::initialize()
 	sound_type["system_mute"] = sol::property(
 			static_cast<bool (sound_manager::*)() const>(&sound_manager::system_mute),
 			static_cast<void (sound_manager::*)(bool)>(&sound_manager::system_mute));
-	sound_type["attenuation"] = sol::property(
-			&sound_manager::attenuation,
-			&sound_manager::set_attenuation);
 	sound_type["recording"] = sol::property(&sound_manager::is_recording);
 
 

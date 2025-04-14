@@ -52,8 +52,7 @@ void pc9801_118_device::device_add_mconfig(machine_config &config)
 	// TODO: "ANCHOR" & "MAZE" custom NEC chips
 	// sourced by 5D clock
 
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
 	// actually YMF297-F (YMF288 + OPL3 compatible FM sources), unknown clock / divider
 	// 5B is near both CS-4232 and this
@@ -63,8 +62,8 @@ void pc9801_118_device::device_add_mconfig(machine_config &config)
 	//m_opn3->port_b_read_callback().set(FUNC(pc8801_state::opn_portb_r));
 	//m_opn3->port_a_write_callback().set(FUNC(pc8801_state::opn_porta_w));
 	m_opn3->port_b_write_callback().set(FUNC(pc9801_118_device::opn_portb_w));
-	m_opn3->add_route(ALL_OUTPUTS, "lspeaker", 1.00);
-	m_opn3->add_route(ALL_OUTPUTS, "rspeaker", 1.00);
+	m_opn3->add_route(ALL_OUTPUTS, "speaker", 1.00, 0);
+	m_opn3->add_route(ALL_OUTPUTS, "speaker", 1.00, 1);
 }
 
 
